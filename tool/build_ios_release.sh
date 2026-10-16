@@ -142,6 +142,8 @@ if [[ "$SIGNING_MODE" == "--no-codesign" ]]; then
   "$FLUTTER_BIN" build ios --release --no-codesign "${DEFINES[@]}"
   echo "==> Verified build/ios/iphoneos/Runner.app (unsigned)"
 else
-  "$FLUTTER_BIN" build ipa --release "${DEFINES[@]}"
+  "$FLUTTER_BIN" build ipa --release \
+    --export-options-plist=ios/ExportOptions.plist \
+    "${DEFINES[@]}"
   echo "==> Upload build/ios/ipa/*.ipa with Xcode Organizer or Transporter"
 fi
