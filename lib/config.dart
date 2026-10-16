@@ -59,6 +59,14 @@ class AppConfig {
   static const String googleServerClientId =
       String.fromEnvironment('GOOGLE_SERVER_CLIENT_ID');
 
+  /// The native iOS OAuth client. This must come from the same Google Cloud
+  /// project as [googleServerClientId]. It is passed explicitly because the
+  /// Firebase plist may intentionally belong to a different project used for
+  /// notifications; allowing Google Sign-In to infer its client from that
+  /// plist can make the native SDK terminate while checking callback schemes.
+  static const String googleIosClientId =
+      String.fromEnvironment('GOOGLE_IOS_CLIENT_ID');
+
   /// Whether native Google sign-in can run at all.
   static bool get googleSignInConfigured => googleServerClientId.isNotEmpty;
 
