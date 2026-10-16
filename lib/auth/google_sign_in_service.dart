@@ -1,3 +1,4 @@
+import 'package:flutter/foundation.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 
 import '../config.dart';
@@ -58,6 +59,10 @@ class GoogleSignInAuthenticator implements GoogleAuthenticator {
       : _client = client ??
             GoogleSignIn(
               scopes: const ['email', 'profile'],
+              clientId: defaultTargetPlatform == TargetPlatform.iOS &&
+                      AppConfig.googleIosClientId.isNotEmpty
+                  ? AppConfig.googleIosClientId
+                  : null,
               serverClientId: AppConfig.googleServerClientId.isEmpty
                   ? null
                   : AppConfig.googleServerClientId,

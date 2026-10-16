@@ -128,9 +128,26 @@ if [[ -z "$ios_oauth_project" || -z "$server_oauth_project" ||
   exit 1
 fi
 
+expected_reversed_client_id="com.googleusercontent.apps.${GOOGLE_IOS_CLIENT_ID%.apps.googleusercontent.com}"
+if [[ "$GOOGLE_IOS_REVERSED_CLIENT_ID" != "$expected_reversed_client_id" ]]; then
+  echo "error: GOOGLE_IOS_REVERSED_CLIENT_ID does not match GOOGLE_IOS_CLIENT_ID." >&2
+  echo "       Copy both values from the same iOS OAuth client plist." >&2
+  exit 1
+fi
+
 if ! cmp -s "$FIREBASE_IOS_PLIST_PATH" ios/Runner/GoogleService-Info.plist; then
   cp "$FIREBASE_IOS_PLIST_PATH" ios/Runner/GoogleService-Info.plist
 fi
+# Firebase and production OAuth can live in separate Google projects. Keep the
+# Firebase app identifiers used by Messaging, but make the OAuth entries in the
+# bundled copy agree with the explicit production client. google_sign_in_ios
+# reads CLIENT_ID from this file when no runtime override is available, and a
+# disagreement causes Google's native SDK to raise a fatal missing-URL-scheme
+# exception before Dart can report an error.
+/usr/libexec/PlistBuddy -c "Set :CLIENT_ID $GOOGLE_IOS_CLIENT_ID" \
+  ios/Runner/GoogleService-Info.plist
+/usr/libexec/PlistBuddy -c "Set :REVERSED_CLIENT_ID $GOOGLE_IOS_REVERSED_CLIENT_ID" \
+  ios/Runner/GoogleService-Info.plist
 cat > ios/Flutter/Secrets.xcconfig <<CONFIG
 GOOGLE_MAPS_API_KEY=$GOOGLE_MAPS_API_KEY
 GOOGLE_IOS_CLIENT_ID=$GOOGLE_IOS_CLIENT_ID
@@ -142,6 +159,7 @@ DEFINES=(
   --dart-define="PROPERTY_RENTALS=$PROPERTY_RENTALS"
   --dart-define="API_BASE_URL=$API_BASE_URL"
   --dart-define="ANALYTICS_BASE_URL=$ANALYTICS_BASE_URL"
+  --dart-define="GOOGLE_IOS_CLIENT_ID=$GOOGLE_IOS_CLIENT_ID"
   --dart-define="GOOGLE_SERVER_CLIENT_ID=$GOOGLE_SERVER_CLIENT_ID"
   --dart-define="GOOGLE_MAPS_API_KEY=$GOOGLE_MAPS_API_KEY"
   --dart-define="GOOGLE_PLACES_API_KEY=$GOOGLE_PLACES_API_KEY"
