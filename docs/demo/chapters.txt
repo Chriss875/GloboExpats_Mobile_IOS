@@ -1,0 +1,9 @@
+01-guest-discovery|/home/devsystemadmin/GloboExpats_Mobile/e2e/videos/AU-044-r9-375-b.webm
+02-buyer-purchase-payment|/home/devsystemadmin/GloboExpats_Mobile/e2e/videos/AU-029-mobile.webm
+03-selling-end-to-end|/home/devsystemadmin/GloboExpats_Mobile/e2e/videos/AU-040-r4-mobile.webm
+04-seller-management|/home/devsystemadmin/GloboExpats_Mobile/e2e/videos/AU-054-mobile.webm
+05-requests|/home/devsystemadmin/GloboExpats_Mobile/e2e/videos/AU-056-375x667-r4.webm
+06-delivery-handoff|/home/devsystemadmin/GloboExpats_Mobile/e2e/videos/AU-039-r3-delivered.webm
+07-insights|/home/devsystemadmin/GloboExpats_Mobile/e2e/videos/AU-035-sk2-mobile.webm
+08-admin-escrow|/home/devsystemadmin/GloboExpats_Mobile/e2e/videos/AU-042-r9-1280.webm
+09-bugs-found-and-fixed|/home/devsystemadmin/GloboExpats_Mobile/e2e/videos/AU-047-verify-375.webm

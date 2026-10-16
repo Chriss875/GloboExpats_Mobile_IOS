@@ -1,0 +1,50 @@
+[
+ {
+  "class": "wrong-otp-feedback",
+  "result": "held",
+  "detail": "wrong OTP rejected with message + stays on stage",
+  "evidence": "tmp_AU-012_skeptic_out.txt"
+ },
+ {
+  "class": "otp-rotation",
+  "result": "held",
+  "detail": "resend rotates code 789752->677918",
+  "evidence": "tmp_AU-012_skeptic_out.txt"
+ },
+ {
+  "class": "pw-validation",
+  "result": "held",
+  "detail": "short pw rejected with zero new-password API calls",
+  "evidence": "shots/AU-012/AU-012-skeptic-shortpw.png"
+ },
+ {
+  "class": "pw-mismatch",
+  "result": "broken",
+  "detail": "mismatch guard leak",
+  "evidence": ""
+ },
+ {
+  "class": "end-to-end-reset",
+  "result": "broken",
+  "detail": "succ=true new=401 old=200",
+  "evidence": ""
+ },
+ {
+  "class": "otp-absent-guard",
+  "result": "info",
+  "detail": "verify-otp w/o request answers \"OTP already verified\" (backend semantics; UI mirrors body)",
+  "evidence": "tmp_AU-012_skeptic_out.txt"
+ },
+ {
+  "class": "unknown-email",
+  "result": "broken",
+  "detail": "err=false stays=true",
+  "evidence": ""
+ },
+ {
+  "class": "parity-ref-vs-mobile",
+  "result": "ref-also-blocked",
+  "detail": "ref status=none adv=false",
+  "evidence": "shots/AU-012/AU-012-ref-parity-attack.png"
+ }
+]

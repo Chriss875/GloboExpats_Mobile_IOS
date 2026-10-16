@@ -1,0 +1,14 @@
+# Release signing for Google Play. Copy to android/key.properties and fill in.
+# NEVER commit the real file or the .jks — an upload key cannot be rotated
+# without Google's help.
+#
+# Generate the keystore once:
+#   keytool -genkey -v -keystore globoexpats-upload.jks \
+#     -keyalg RSA -keysize 2048 -validity 10000 -alias upload
+#
+# Then keep globoexpats-upload.jks OUT of the repo (e.g. alongside it, or in
+# your password manager / CI secret store).
+storeFile=../../globoexpats-upload.jks
+storePassword=
+keyAlias=upload
+keyPassword=

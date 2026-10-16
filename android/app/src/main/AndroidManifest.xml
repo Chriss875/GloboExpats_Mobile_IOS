@@ -1,0 +1,124 @@
+<manifest xmlns:android="http://schemas.android.com/apk/res/android">
+        <uses-permission android:name="android.permission.INTERNET"/>
+        <uses-permission android:name="android.permission.POST_NOTIFICATIONS"/>
+        <!-- Share Kit "Download": saving a poster to the gallery needs this
+             only on Android 9 and older (gal). -->
+        <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" android:maxSdkVersion="29"/>
+        <!-- "Use current location" in the address map picker. -->
+        <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION"/>
+        <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION"/>
+
+        <!-- Play turns the two location permissions above into REQUIRED
+             hardware features (gps / network-location) unless they are
+             declared here, and then hides the app from every device without
+             them. Location is only the "use my current location" shortcut in
+             the address picker - search and tapping the map both work without
+             it - so none of this is required to run the app. -->
+        <uses-feature android:name="android.hardware.location" android:required="false"/>
+        <uses-feature android:name="android.hardware.location.gps" android:required="false"/>
+        <uses-feature android:name="android.hardware.location.network" android:required="false"/>
+<application
+        android:label="GloboExpats"
+        android:requestLegacyExternalStorage="true"
+        android:name="${applicationName}"
+        android:icon="@mipmap/ic_launcher">
+        <!-- Maps SDK for Android tile rendering. Value comes from the
+             GOOGLE_MAPS_API_KEY environment variable via build.gradle's
+             manifestPlaceholders - empty when unset, so the map simply fails
+             to render rather than crashing the build. -->
+        <meta-data
+            android:name="com.google.android.geo.API_KEY"
+            android:value="${googleMapsApiKey}"/>
+        <!-- Tells Chrome this app belongs to the website, so the site's
+             navigator.getInstalledRelatedApps() can see it is installed and
+             offer "Open in app" instead of "Get the app". -->
+        <meta-data
+            android:name="asset_statements"
+            android:resource="@string/asset_statements"/>
+        <meta-data
+            android:name="com.google.firebase.messaging.default_notification_channel_id"
+            android:value="globoexpats_updates"/>
+        <!-- Without these the system tray falls back to the full-colour
+             launcher icon, which Android renders as a white blob because it
+             uses only the alpha channel. -->
+        <meta-data
+            android:name="com.google.firebase.messaging.default_notification_icon"
+            android:resource="@drawable/ic_notification"/>
+        <meta-data
+            android:name="com.google.firebase.messaging.default_notification_color"
+            android:resource="@color/notification_accent"/>
+        <activity
+            android:name=".MainActivity"
+            android:exported="true"
+            android:launchMode="singleTop"
+            android:taskAffinity=""
+            android:theme="@style/LaunchTheme"
+            android:configChanges="orientation|keyboardHidden|keyboard|screenSize|smallestScreenSize|locale|layoutDirection|fontScale|screenLayout|density|uiMode"
+            android:hardwareAccelerated="true"
+            android:windowSoftInputMode="adjustResize">
+            <!-- Specifies an Android theme to apply to this Activity as soon as
+                 the Android process has started. This theme is visible to the user
+                 while the Flutter UI initializes. After that, this theme continues
+                 to determine the Window background behind the Flutter UI. -->
+            <meta-data
+              android:name="io.flutter.embedding.android.NormalTheme"
+              android:resource="@style/NormalTheme"
+              />
+            <!-- Hand the opened link's path to go_router (the routes mirror
+                 the web's URLs). -->
+            <meta-data
+              android:name="flutter_deeplinking_enabled"
+              android:value="true"
+              />
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN"/>
+                <category android:name="android.intent.category.LAUNCHER"/>
+            </intent-filter>
+            <!-- Website links open here when the app is installed (Android App
+                 Links; the site serves /.well-known/assetlinks.json). Only the
+                 pages the app shows itself are claimed: checkout (payment
+                 provider returns), sign-in emails and admin stay in the
+                 browser. The web's "Open in app" banner sends the same list
+                 (GloboExpats_Frontend lib/android-app.ts), so keep the two in
+                 step. Hosts come from build.gradle, per Play track. -->
+            <intent-filter android:autoVerify="true">
+                <action android:name="android.intent.action.VIEW"/>
+                <category android:name="android.intent.category.DEFAULT"/>
+                <category android:name="android.intent.category.BROWSABLE"/>
+                <data android:scheme="https"/>
+                <data android:host="${webLinkHost}"/>
+                <data android:host="${webLinkHostAlt}"/>
+                <data android:path="/"/>
+                <data android:path="/browse"/>
+                <data android:path="/search"/>
+                <data android:path="/cart"/>
+                <data android:path="/sell"/>
+                <data android:path="/requests"/>
+                <data android:path="/notifications"/>
+                <data android:path="/orders"/>
+                <data android:pathPrefix="/product/"/>
+                <data android:pathPrefix="/seller/"/>
+                <data android:pathPrefix="/category/"/>
+                <data android:pathPrefix="/request/"/>
+                <data android:pathPrefix="/orders/"/>
+                <data android:pathPrefix="/expat/dashboard"/>
+            </intent-filter>
+        </activity>
+        <!-- Don't delete the meta-data below.
+             This is used by the Flutter tool to generate GeneratedPluginRegistrant.java -->
+        <meta-data
+            android:name="flutterEmbedding"
+            android:value="2" />
+    </application>
+    <!-- Required to query activities that can process text, see:
+         https://developer.android.com/training/package-visibility and
+         https://developer.android.com/reference/android/content/Intent#ACTION_PROCESS_TEXT.
+
+         In particular, this is used by the Flutter engine in io.flutter.plugin.text.ProcessTextPlugin. -->
+    <queries>
+        <intent>
+            <action android:name="android.intent.action.PROCESS_TEXT"/>
+            <data android:mimeType="text/plain"/>
+        </intent>
+    </queries>
+</manifest>

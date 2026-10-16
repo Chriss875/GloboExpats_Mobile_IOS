@@ -1,0 +1,35 @@
+const L=require('./lib_verify.js');const fs=require('fs');
+const fx=JSON.parse(fs.readFileSync('/tmp/au025_fixtures.json','utf8'));
+const sleep=ms=>new Promise(r=>setTimeout(r,ms));
+(async()=>{
+ const browser=await L.newBrowser();
+ const ctx=await L.newCtx(browser,{viewport:{width:375,height:667},videoPath:'e2e/videos/AU-025-skeptic-ref.webm'});
+ const p=await ctx.newPage();
+ await p.goto(L.REF+'/login',{waitUntil:'load',timeout:60000}).catch(()=>{});
+ await sleep(3000);
+ // enumerate inputs
+ const inputs=await p.evaluate(()=>[...document.querySelectorAll('input')].map(i=>({type:i.type,name:i.name||'',ph:i.placeholder||''})));
+ console.log('ref-login-inputs:',JSON.stringify(inputs));
+ await p.locator('input').first().fill(fx.buyer.email,{timeout:8000}).catch(e=>console.log('email-fill-err'));
+ await sleep(400);
+ await p.locator('input[type="password"]').first().fill(fx.buyer.pw,{timeout:8000}).catch(e=>console.log('pw-fill-err'));
+ await sleep(400);
+ const btns=await p.evaluate(()=>[...document.querySelectorAll('button')].map(b=>b.innerText.trim()).filter(Boolean));
+ console.log('ref-login-buttons:',JSON.stringify(btns));
+ await Promise.all([p.waitForNavigation({waitUntil:'load',timeout:30000}).catch(()=>{}),p.locator('button',{hasText:/sign in/i}).first().click({force:true}).catch(()=>{})]);
+ await sleep(3500);
+ console.log('after-login-url:',p.url());
+ console.log('after-login-text:',(await p.evaluate(()=>document.body.innerText)).slice(0,200).replace(/\n+/g,'|'));
+ await p.goto(L.REF+'/product/'+fx.productId,{waitUntil:'load',timeout:60000}).catch(()=>{}); await sleep(4000);
+ const dtext=await p.evaluate(()=>document.body.innerText);
+ fs.writeFileSync('/tmp/au025_sk_ref_detail.txt',dtext);
+ console.log('ref-detail-has-product:',dtext.includes('AU025 Quote Probe Table'));
+ await L.screenshot(p,'e2e/shots/AU-025-ref/sk-ref-detail-mobile.png');
+ await p.goto(L.REF+'/checkout',{waitUntil:'load',timeout:60000}).catch(()=>{}); await sleep(6000);
+ const ctext=await p.evaluate(()=>document.body.innerText);
+ fs.writeFileSync('/tmp/au025_sk_ref_checkout.txt',ctext);
+ await L.screenshot(p,'e2e/shots/AU-025-ref/sk-ref-checkout-mobile.png');
+ console.log('REF-CHECKOUT:',ctext.slice(0,1400).replace(/\n+/g,'|'));
+ await L.closeVideo(ctx,'e2e/videos/AU-025-skeptic-ref.webm');
+ await ctx.close(); await browser.close();
+})().catch(e=>console.error('FATAL',e.message));

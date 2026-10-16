@@ -1,0 +1,240 @@
+{
+  "ts": "2026-08-24T05:29:35.629Z",
+  "unit": "AU-012",
+  "title": "reset_password_stages",
+  "wave": "skeptic",
+  "agent": "skeptic-AU-012-r2",
+  "build_sha": "16b9b33",
+  "served_mtime": "Mon, 24 Aug 2026 03:13:31 GMT",
+  "viewport": "375x667 + 768x1024",
+  "attacks_attempted": 10,
+  "attacks_broken": 1,
+  "findings": [
+    {
+      "class": "public-endpoints-permitall",
+      "result": "HELD",
+      "detail": "reset-passwordEmail=404, verify-otp(garbage token)=200, new-password(unknown)=404 — matches sandbox permitAll design; no mutation of unknown users",
+      "evidence": "tmp_sk_au012_r2.json perm block"
+    },
+    {
+      "class": "hostile-email-inputs",
+      "result": "HELD",
+      "detail": "script/UTF8/spaces/huge/bad-format emails: none advanced past stage 1 ([{\"tag\":\"script-tag\",\"len\":\"25\",\"fired\":\"NONE\",\"still_s1\":true},{\"tag\":\"swahili+emoji\",\"len\":\"21\",\"fired\":\"NONE\",\"still_s1\":true},{\"tag\":\"spaces-only\",\"len\":\"5\",\"fired\":\"NONE\",\"still_s1\":true},{\"tag\":\"huge500\",\"len\":\"509\",\"fired\":\"NONE\",\"still_s1\":true},{\"tag\":\"badformat\",\"len\":\"12\",\"fired\":\"NONE\",\"still_s1\":true}]); raw script string not left in DOM text layer",
+      "evidence": "e2e/shots/AU-012/AU-012-sk-hostile-huge500.png"
+    },
+    {
+      "class": "offline-midrequest",
+      "result": "HELD",
+      "detail": "0 request(s) attempted while offline; UI stayed on stage 1 (no crash/no nav); first successful retry advanced to stage 2 with 200 and echoed the fixture email",
+      "evidence": "e2e/shots/AU-012/AU-012-sk-offline-send.png"
+    },
+    {
+      "class": "double-tap-wrong-otp",
+      "result": "HELD",
+      "detail": "two rapid taps on Verify Code produced 1 verify-otp call(s), rejection shown=true, stayed on stage 2=true",
+      "evidence": "e2e/shots/AU-012/AU-012-sk-garbage-otp.png"
+    },
+    {
+      "class": "midflow-backout",
+      "result": "HELD",
+      "detail": "Back to login -> Forgot password always lands on a clean stage 1 (no stale OTP/new-password state)",
+      "evidence": "e2e/shots/AU-012/AU-012-sk-backout-reentry.png"
+    },
+    {
+      "class": "garbage-otp-handling",
+      "result": "HELD",
+      "detail": "letters/short/huge/arabic-indic digits/empty all rejected client- or server-side, funnel intact on stage 2 ([{\"tag\":\"letters\",\"fired\":\"200 POST /ap\",\"still_s2\":true},{\"tag\":\"short4\",\"fired\":\"200 POST /ap\",\"still_s2\":true},{\"tag\":\"huge\",\"fired\":\"200 POST /ap\",\"still_s2\":true},{\"tag\":\"unicode\",\"fired\":\"200 POST /ap\",\"still_s2\":true},{\"tag\":\"empty\",\"fired\":\"200 POST /ap\",\"still_s2\":true}])",
+      "evidence": "e2e/shots/AU-012/AU-012-sk-garbage-otp.png"
+    },
+    {
+      "class": "hostile-passwords",
+      "result": "HELD",
+      "detail": "500-char/emoji/whitespace passwords did not corrupt the flow ([{\"tag\":\"pw500\",\"newpw_calls\":1,\"still_s3\":true,\"success\":false},{\"tag\":\"pwEmoji\",\"newpw_calls\":1,\"still_s3\":false,\"success\":false},{\"tag\":\"pwSpaces\",\"newpw_calls\":0,\"still_s3\":false,\"success\":false}])",
+      "evidence": "e2e/shots/AU-012/AU-012-sk-pw-attack-end-state.png"
+    },
+    {
+      "class": "duplicate-submit-guard",
+      "result": "HELD",
+      "detail": "double-tap on Reset Password produced 1 call(s), success card shown, login NEW=true OLD rejected=true",
+      "evidence": "e2e/shots/AU-012/AU-012-sk-doubletap-submit-end.png"
+    },
+    {
+      "class": "snackbar-semantics-gap",
+      "result": "CONFIRMED-DEFECT",
+      "detail": "ghost-email inline feedback visible in raw DOM text layer=true but in flt-semantics tree=false — transient messages are invisible to the semantics/a11y layer (screen readers get nothing)",
+      "evidence": "e2e/shots/AU-012/AU-012-sk-a11y-snackbar.png"
+    }
+  ],
+  "failures": [],
+  "evidence": [
+    "e2e/shots/AU-012/AU-012-sk-hostile-script-tag.png",
+    "e2e/shots/AU-012/AU-012-sk-hostile-swahili+emoji.png",
+    "e2e/shots/AU-012/AU-012-sk-hostile-spaces-only.png",
+    "e2e/shots/AU-012/AU-012-sk-hostile-huge500.png",
+    "e2e/shots/AU-012/AU-012-sk-hostile-badformat.png",
+    "e2e/shots/AU-012/AU-012-sk-offline-send.png",
+    "e2e/shots/AU-012/AU-012-sk-after-offline-retry-s2.png",
+    "e2e/shots/AU-012/AU-012-sk-backout-reentry.png",
+    "e2e/shots/AU-012/AU-012-sk-garbage-otp.png",
+    "e2e/shots/AU-012/AU-012-sk-pw-attack-end-state.png",
+    "e2e/shots/AU-012/AU-012-sk-doubletap-submit-end.png",
+    "e2e/videos/AU-012-skeptic-mobile.webm",
+    "e2e/shots/AU-012/AU-012-sk-tablet-dbltap-s2.png",
+    "e2e/videos/AU-012-skeptic-tablet.webm",
+    "e2e/shots/AU-012/AU-012-sk-a11y-snackbar.png"
+  ],
+  "net": {
+    "mobile": [
+      "404 POST /api/v1/userManagement/reset-passwordEmail?email=mteja%F0%9F%98%80%40wanachi.co.tz",
+      "404 POST /api/v1/userManagement/reset-passwordEmail?email=aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa%40mail.com",
+      "200 POST /api/v1/userManagement/reset-passwordEmail?email=au012.sk.mob.1787549376234%40mail.com",
+      "200 POST /api/v1/userManagement/verify-otp?loggingEmail=au012.sk.mob.1787549376234%40mail.com&otp=000000",
+      "200 POST /api/v1/userManagement/reset-passwordEmail?email=au012.sk.mob.1787549376234%40mail.com",
+      "200 POST /api/v1/userManagement/verify-otp?loggingEmail=au012.sk.mob.1787549376234%40mail.com&otp=abcdef",
+      "200 POST /api/v1/userManagement/verify-otp?loggingEmail=au012.sk.mob.1787549376234%40mail.com&otp=1234",
+      "200 POST /api/v1/userManagement/verify-otp?loggingEmail=au012.sk.mob.1787549376234%40mail.com&otp=999999",
+      "200 POST /api/v1/userManagement/verify-otp?loggingEmail=au012.sk.mob.1787549376234%40mail.com&otp=%D9%A1%D9%A2%D9%A3%D9%A4%D9%A5%D9%A6",
+      "200 POST /api/v1/userManagement/verify-otp?loggingEmail=au012.sk.mob.1787549376234%40mail.com&otp=196671",
+      "400 POST /api/v1/userManagement/new-password",
+      "200 POST /api/v1/userManagement/new-password",
+      "200 POST /api/v1/userManagement/reset-passwordEmail?email=au012.sk.mob2.1787549603562%40mail.com",
+      "200 POST /api/v1/userManagement/verify-otp?loggingEmail=au012.sk.mob2.1787549603562%40mail.com&otp=856745",
+      "200 POST /api/v1/userManagement/new-password"
+    ],
+    "tablet": [
+      "200 POST /api/v1/userManagement/reset-passwordEmail?email=au012.sk.tab.1787549621365%40mail.com"
+    ]
+  },
+  "pageerrors": [],
+  "imgs": {},
+  "freshness_ok": true,
+  "perm": {
+    "noauth_send": 404,
+    "garbage_token_verify": 200,
+    "noauth_newpw": 404
+  },
+  "hostile": [
+    {
+      "tag": "script-tag",
+      "len": "25",
+      "fired": "NONE",
+      "still_s1": true
+    },
+    {
+      "tag": "swahili+emoji",
+      "len": "21",
+      "fired": "NONE",
+      "still_s1": true
+    },
+    {
+      "tag": "spaces-only",
+      "len": "5",
+      "fired": "NONE",
+      "still_s1": true
+    },
+    {
+      "tag": "huge500",
+      "len": "509",
+      "fired": "NONE",
+      "still_s1": true
+    },
+    {
+      "tag": "badformat",
+      "len": "12",
+      "fired": "NONE",
+      "still_s1": true
+    }
+  ],
+  "offline": {
+    "requests_while_offline_visible_in_log": 0,
+    "stayed_stage1": true,
+    "retry_reached_s2": true,
+    "last_send_200": true,
+    "s2_echoes_email": true
+  },
+  "doubletap_wrong": {
+    "taps": 2,
+    "verify_calls": [
+      "200 POST /ap"
+    ],
+    "rejected_msg": true,
+    "stays_s2": true
+  },
+  "backout": {
+    "login_ok": true,
+    "reenter_ok": true,
+    "s1": true,
+    "s2_stale": false,
+    "s3_stale": false
+  },
+  "garbageOtp": [
+    {
+      "tag": "letters",
+      "fired": "200 POST /ap",
+      "still_s2": true
+    },
+    {
+      "tag": "short4",
+      "fired": "200 POST /ap",
+      "still_s2": true
+    },
+    {
+      "tag": "huge",
+      "fired": "200 POST /ap",
+      "still_s2": true
+    },
+    {
+      "tag": "unicode",
+      "fired": "200 POST /ap",
+      "still_s2": true
+    },
+    {
+      "tag": "empty",
+      "fired": "200 POST /ap",
+      "still_s2": true
+    }
+  ],
+  "stage3_with_fresh_otp": true,
+  "pw_attacks": [
+    {
+      "tag": "pw500",
+      "newpw_calls": 1,
+      "still_s3": true,
+      "success": false
+    },
+    {
+      "tag": "pwEmoji",
+      "newpw_calls": 1,
+      "still_s3": false,
+      "success": false
+    },
+    {
+      "tag": "pwSpaces",
+      "newpw_calls": 0,
+      "still_s3": false,
+      "success": false
+    }
+  ],
+  "dbltap_submit": {
+    "tapped": true,
+    "reached_s3": true,
+    "newpw_calls_after_doubletap": 1,
+    "success_card": true,
+    "hash_changed": true,
+    "login_new_ok": true,
+    "login_old_rejected": true
+  },
+  "pageerrors_mobile": 0,
+  "tablet_dbltap": {
+    "stage1": true,
+    "send_calls_after_double_tap": 0,
+    "reached_s2": true,
+    "echo": true
+  },
+  "snackbar_a11y": {
+    "sawDom": true,
+    "sawSem": false
+  },
+  "images_requested": 0,
+  "images_200": 0
+}

@@ -1,0 +1,127 @@
+plugins {
+    id "com.android.application"
+    id "kotlin-android"
+    id "com.google.gms.google-services"
+    // The Flutter Gradle Plugin must be applied after the Android and Kotlin Gradle plugins.
+    id "dev.flutter.flutter-gradle-plugin"
+}
+
+// Read once, at configuration time — the same mechanism `--dart-define`
+// doesn't reach (it only affects Dart code, never the native manifest).
+// Empty is fine: the manifest placeholder resolves to an empty string and
+// the Maps SDK simply fails to render tiles, matching the Dart-side
+// AppConfig.mapsConfigured graceful-degradation path.
+def googleMapsApiKey = System.getenv('GOOGLE_MAPS_API_KEY') ?: ''
+
+// The website whose links open in this app (Android App Links). One package
+// ships on two Play tracks, so each build claims its own site: prod the live
+// site, dev the dev site — tool/build_release.sh exports WEB_LINK_HOST per
+// flavour. Unset (flutter run) means the live site.
+def webLinkHost = System.getenv('WEB_LINK_HOST') ?: 'www.globoexpats.com'
+def webLinkHostAlt = System.getenv('WEB_LINK_HOST_ALT') ?: 'globoexpats.com'
+
+// Release signing material. Kept OUT of the repo (android/key.properties is
+// gitignored) because an upload key is the one secret that cannot be rotated
+// without Google's help. CI can supply the same four values as environment
+// variables instead.
+def keystorePropertiesFile = rootProject.file("key.properties")
+def keystoreProperties = new Properties()
+def hasKeystoreFile = keystorePropertiesFile.exists()
+if (hasKeystoreFile) {
+    keystoreProperties.load(new FileInputStream(keystorePropertiesFile))
+}
+def envStoreFile = System.getenv('ANDROID_KEYSTORE_PATH')
+def hasEnvKeystore = envStoreFile != null && !envStoreFile.isEmpty()
+def canSignRelease = hasKeystoreFile || hasEnvKeystore
+
+android {
+    namespace = "com.globoexpats.globoexpats_mobile"
+    // Play requires new apps and updates to target Android 16 (API 36) as of
+    // 31 Aug 2026, so both values are pinned here rather than inherited from
+    // the Flutter SDK's older defaults.
+    compileSdk = 36
+    // Pinned above the Flutter SDK default because several plugins
+    // (geolocator, image_picker, maps) declare a higher NDK; Gradle warns and
+    // falls back otherwise. NDK versions are backward compatible, so the
+    // highest one any dependency asks for is the correct choice.
+    ndkVersion = "27.0.12077973"
+
+    compileOptions {
+        coreLibraryDesugaringEnabled true
+        sourceCompatibility = JavaVersion.VERSION_1_8
+        targetCompatibility = JavaVersion.VERSION_1_8
+    }
+
+    kotlinOptions {
+        jvmTarget = JavaVersion.VERSION_1_8
+    }
+
+    defaultConfig {
+        applicationId = "com.globoexpats.globoexpats_mobile"
+        // Current Firebase Messaging requires Android 6.0 (API 23)+.
+        minSdk = 23
+        targetSdk = 36
+        versionCode = flutter.versionCode
+        versionName = flutter.versionName
+        manifestPlaceholders += [
+            googleMapsApiKey: googleMapsApiKey,
+            webLinkHost: webLinkHost,
+            webLinkHostAlt: webLinkHostAlt,
+        ]
+    }
+
+    signingConfigs {
+        release {
+            if (hasEnvKeystore) {
+                storeFile = file(envStoreFile)
+                storePassword = System.getenv('ANDROID_KEYSTORE_PASSWORD')
+                keyAlias = System.getenv('ANDROID_KEY_ALIAS')
+                keyPassword = System.getenv('ANDROID_KEY_PASSWORD')
+            } else if (hasKeystoreFile) {
+                storeFile = keystoreProperties['storeFile'] ? file(keystoreProperties['storeFile']) : null
+                storePassword = keystoreProperties['storePassword']
+                keyAlias = keystoreProperties['keyAlias']
+                keyPassword = keystoreProperties['keyPassword']
+            }
+        }
+    }
+
+    buildTypes {
+        release {
+            // Play rejects a debug-signed upload outright. When no keystore is
+            // configured the build deliberately falls back to debug signing so
+            // `flutter run --release` still works locally — but `verifyRelease`
+            // below fails the BUNDLE task, so an unsigned artifact can never be
+            // mistaken for a shippable one.
+            signingConfig = canSignRelease ? signingConfigs.release : signingConfigs.debug
+
+            // R8: shrink + obfuscate. Keeps the download small enough to matter
+            // on the networks this app is used on.
+            minifyEnabled = true
+            shrinkResources = true
+            proguardFiles getDefaultProguardFile("proguard-android-optimize.txt"), "proguard-rules.pro"
+        }
+    }
+}
+
+dependencies {
+    coreLibraryDesugaring "com.android.tools:desugar_jdk_libs:2.1.4"
+}
+
+// A release AAB is what gets uploaded, so that is the task that must refuse to
+// produce a debug-signed artifact.
+tasks.configureEach { task ->
+    if (task.name == "bundleRelease" && !canSignRelease) {
+        task.doFirst {
+            throw new GradleException(
+                "Refusing to build a release bundle with debug keys.\n" +
+                "Create android/key.properties (see android/key.properties.example) " +
+                "or set ANDROID_KEYSTORE_PATH / ANDROID_KEYSTORE_PASSWORD / " +
+                "ANDROID_KEY_ALIAS / ANDROID_KEY_PASSWORD.")
+        }
+    }
+}
+
+flutter {
+    source = "../.."
+}

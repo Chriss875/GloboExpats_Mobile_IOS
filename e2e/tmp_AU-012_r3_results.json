@@ -1,0 +1,239 @@
+{
+  "ts": "2026-08-24T03:23:51.569Z",
+  "unit": "AU-012",
+  "title": "reset_password_stages",
+  "wave": "verify",
+  "agent": "verifier-AU-012-r3",
+  "build_sha": "7b4342f",
+  "served_mtime": "Mon, 24 Aug 2026 03:13:31 GMT",
+  "viewport": "375x667 + 768x1024",
+  "checks": {
+    "freshness": {
+      "expected_mtime": "Mon, 24 Aug 2026 03:13:31 GMT",
+      "served_mtime": "Mon, 24 Aug 2026 03:13:31 GMT",
+      "sha": "7b4342f",
+      "mtime_match": true,
+      "content_marker_present": true,
+      "note": "VERIFY_RECIPE 2026-08-24 06:20: both 03:02:36 and 03:13:31 mtimes are valid pristine 7b4342f bundles; content check beats timestamp"
+    },
+    "mobile": {
+      "fixture_email_masked": "au0***@mail.com",
+      "fixture_registered_login_ok": true,
+      "stage1_renders": true,
+      "stage1_copy": true,
+      "no_placeholder_strings": true,
+      "ghost_404_observed": true,
+      "ghost_message_surfaced": false,
+      "ghost_stays_stage1": true,
+      "send_busy_state": true,
+      "send_call_status_200": true,
+      "stage2_reached": true,
+      "s2_subtitle_echoes_real_email": true,
+      "db_otp_present_round1": true,
+      "resend_rotates_db_code": true,
+      "change_email_then_resend_returns_s2": true,
+      "third_otp_usable": true,
+      "wrong_otp_rejected": true,
+      "stage3_reached_with_db_otp": true,
+      "s3_inputs": [
+        {
+          "type": "text",
+          "valLen": 6,
+          "x": 20,
+          "y": 250,
+          "w": 343,
+          "h": 74
+        },
+        {
+          "type": "password",
+          "valLen": 0,
+          "x": 20,
+          "y": 332,
+          "w": 343,
+          "h": 54
+        }
+      ],
+      "visibility_toggle_works": false,
+      "short_pw_blocked_client_side": true,
+      "mismatch_blocked_client_side": true,
+      "success_card_shown": true,
+      "new_password_calls": 1,
+      "auto_redirect_to_login": true,
+      "db_hash_changed": true,
+      "db_hash_before_prefix": "$2a$10$CqZwX",
+      "db_hash_after_prefix": "$2a$10$5O2Qi",
+      "api_login_NEW_password_200": true,
+      "api_OLD_password_rejected": true,
+      "pageerrors": 0
+    },
+    "tablet": {
+      "fixture_email_masked": "au0***@mail.com",
+      "fixture_registered_login_ok": true,
+      "stage1_renders": true,
+      "stage1_copy": true,
+      "no_placeholder_strings": true,
+      "ghost_404_observed": true,
+      "ghost_message_surfaced": true,
+      "ghost_stays_stage1": true,
+      "send_busy_state": true,
+      "send_call_status_200": true,
+      "stage2_reached": true,
+      "s2_subtitle_echoes_real_email": true,
+      "db_otp_present_round1": true,
+      "resend_rotates_db_code": true,
+      "change_email_then_resend_returns_s2": true,
+      "third_otp_usable": true,
+      "wrong_otp_rejected": true,
+      "stage3_reached_with_db_otp": true,
+      "s3_inputs": [
+        {
+          "type": "text",
+          "valLen": 6,
+          "x": 20,
+          "y": 250,
+          "w": 736,
+          "h": 74
+        },
+        {
+          "type": "password",
+          "valLen": 0,
+          "x": 20,
+          "y": 332,
+          "w": 736,
+          "h": 54
+        }
+      ],
+      "visibility_toggle_works": false,
+      "short_pw_blocked_client_side": true,
+      "mismatch_blocked_client_side": true,
+      "success_card_shown": true,
+      "new_password_calls": 1,
+      "auto_redirect_to_login": true,
+      "db_hash_changed": true,
+      "db_hash_before_prefix": "$2a$10$/az75",
+      "db_hash_after_prefix": "$2a$10$N9Qbu",
+      "api_login_NEW_password_200": true,
+      "api_OLD_password_rejected": true,
+      "pageerrors": 0
+    },
+    "ref_mobile": {
+      "ref_page_loads": true,
+      "ref_send_clicked": true,
+      "ref_advance_after_send": false,
+      "ref_net": []
+    },
+    "ref_tablet": {
+      "ref_page_loads": true,
+      "ref_send_clicked": true,
+      "ref_advance_after_send": false,
+      "ref_net": []
+    },
+    "images_requested": 0,
+    "images_200": 0,
+    "images_broken": [],
+    "real_data": true,
+    "real_data_probe": "RW lane: throwaway fixtures registered+logged-in via REAL :8083 /auth/register + /auth/login BEFORE mutation; stage-2 subtitle echoed fixture email in UI; OTP typed into the UI read live from sandbox-db users.reset_password_otp; POST new-password fired from the UI click and DB bcrypt flipped; login-with-NEW-password returned JWT and OLD password 401 — both viewports.",
+    "buttons_total": 30,
+    "buttons_ok": 24,
+    "buttons_failed": [
+      "mobile:Change Email Address",
+      "tablet:Change Email Address"
+    ],
+    "state_asserts": 33,
+    "nav_asserts": 10,
+    "data_asserts": 6,
+    "vision_defects": 0,
+    "vision_findings": []
+  },
+  "failures": [
+    "[mobile] ghost email: net=[404 POST /api/v1/userManagement/reset-passwordEmail?email=ghost.1787541844836%40mail.com] shown=false stayed_s1=true",
+    "[mobile] \"Change Email Address\" did not return to stage 1",
+    "[mobile] visibility toggle did not change DOM input types (text,password -> text,password)",
+    "[tablet] \"Change Email Address\" did not return to stage 1",
+    "[tablet] visibility toggle did not change DOM input types (text,password -> text,password)"
+  ],
+  "evidence": [
+    "e2e/shots/AU-012/AU-012-mobile-01-s1-initial.png",
+    "e2e/shots/AU-012/AU-012-mobile-02-login-via-back.png",
+    "e2e/shots/AU-012/AU-012-mobile-03-ghost-email-rejected.png",
+    "e2e/shots/AU-012/AU-012-mobile-04-s1-filled.png",
+    "e2e/shots/AU-012/AU-012-mobile-05-s2-otp-reached.png",
+    "e2e/shots/AU-012/AU-012-mobile-06-after-resend.png",
+    "e2e/shots/AU-012/AU-012-mobile-07-wrong-otp.png",
+    "e2e/shots/AU-012/AU-012-mobile-08-s3-new-password.png",
+    "e2e/shots/AU-012/AU-012-mobile-09-pw-visible.png",
+    "e2e/shots/AU-012/AU-012-mobile-10-short-pw-blocked.png",
+    "e2e/shots/AU-012/AU-012-mobile-11-mismatch-blocked.png",
+    "e2e/shots/AU-012/AU-012-mobile-12-success.png",
+    "e2e/shots/AU-012/AU-012-mobile-13-back-on-login.png",
+    "e2e/videos/AU-012-r3-mobile.webm",
+    "e2e/shots/AU-012/AU-012-tablet-01-s1-initial.png",
+    "e2e/shots/AU-012/AU-012-tablet-02-login-via-back.png",
+    "e2e/shots/AU-012/AU-012-tablet-03-ghost-email-rejected.png",
+    "e2e/shots/AU-012/AU-012-tablet-04-s1-filled.png",
+    "e2e/shots/AU-012/AU-012-tablet-05-s2-otp-reached.png",
+    "e2e/shots/AU-012/AU-012-tablet-06-after-resend.png",
+    "e2e/shots/AU-012/AU-012-tablet-07-wrong-otp.png",
+    "e2e/shots/AU-012/AU-012-tablet-08-s3-new-password.png",
+    "e2e/shots/AU-012/AU-012-tablet-09-pw-visible.png",
+    "e2e/shots/AU-012/AU-012-tablet-10-short-pw-blocked.png",
+    "e2e/shots/AU-012/AU-012-tablet-11-mismatch-blocked.png",
+    "e2e/shots/AU-012/AU-012-tablet-12-success.png",
+    "e2e/shots/AU-012/AU-012-tablet-13-back-on-login.png",
+    "e2e/videos/AU-012-r3-tablet.webm",
+    "e2e/shots/AU-012/AU-012-ref-mobile-01-initial.png",
+    "e2e/shots/AU-012/AU-012-ref-mobile-02-filled.png",
+    "e2e/shots/AU-012/AU-012-ref-mobile-03-after-send.png",
+    "e2e/shots/AU-012/AU-012-ref-tablet-01-initial.png",
+    "e2e/shots/AU-012/AU-012-ref-tablet-02-filled.png",
+    "e2e/shots/AU-012/AU-012-ref-tablet-03-after-send.png"
+  ],
+  "findings": [],
+  "vision": {
+    "defects": 0,
+    "list": []
+  },
+  "imgs": {},
+  "network": {
+    "mobile": [
+      "404 POST /api/v1/userManagement/reset-passwordEmail?email=ghost.1787541844836%40mail.com",
+      "200 POST /api/v1/userManagement/reset-passwordEmail?email=au012.r3.mobile.1787541832387%40mail.com",
+      "200 POST /api/v1/userManagement/reset-passwordEmail?email=au012.r3.mobile.1787541832387%40mail.com",
+      "200 POST /api/v1/userManagement/verify-otp?loggingEmail=au012.r3.mobile.1787541832387%40mail.com&otp=000000",
+      "200 POST /api/v1/userManagement/verify-otp?loggingEmail=au012.r3.mobile.1787541832387%40mail.com&otp=318471",
+      "200 POST /api/v1/userManagement/new-password"
+    ],
+    "pageerrors": [],
+    "tablet": [
+      "404 POST /api/v1/userManagement/reset-passwordEmail?email=ghost.1787541954433%40mail.com",
+      "200 POST /api/v1/userManagement/reset-passwordEmail?email=au012.r3.tablet.1787541942275%40mail.com",
+      "200 POST /api/v1/userManagement/reset-passwordEmail?email=au012.r3.tablet.1787541942275%40mail.com",
+      "200 POST /api/v1/userManagement/verify-otp?loggingEmail=au012.r3.tablet.1787541942275%40mail.com&otp=000000",
+      "200 POST /api/v1/userManagement/verify-otp?loggingEmail=au012.r3.tablet.1787541942275%40mail.com&otp=398824",
+      "200 POST /api/v1/userManagement/new-password"
+    ]
+  },
+  "nav": 10,
+  "state": 33,
+  "data": 6,
+  "buttons": {
+    "total": 30,
+    "ok": 24,
+    "failed": [
+      "mobile:Change Email Address",
+      "tablet:Change Email Address"
+    ]
+  },
+  "parity": {
+    "blocker": 0,
+    "major": 0,
+    "minor": 2,
+    "accepted": 0,
+    "deltas": [
+      "ACCEPTED-DIVERGENCE: mobile progress strip = 3 numbered dots+labels vs web stepper pills — same steps/order",
+      "MINOR: SnackBars absent from flt-semantics tree (screen-reader invisible); inline error texts DO render",
+      "ACCEPTED-DIVERGENCE: neither stack delivers real SMTP in sandbox; OTP oracle = sandbox users.reset_password_otp"
+    ]
+  },
+  "verdict": "FAIL"
+}

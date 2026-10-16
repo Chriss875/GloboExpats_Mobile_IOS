@@ -1,0 +1,53 @@
+{
+ "checks": {
+  "stage1_renders": true,
+  "stage1_copy_complete": true,
+  "send_click_triggers_busy": true,
+  "stage2_reached": false,
+  "swallowed_error_message": null,
+  "control_json_rewrite_reaches_stage2": true,
+  "tablet_stage1_renders": true,
+  "tablet_stage2_reached": false,
+  "ref_page_loads": true,
+  "ref_advance_after_send": false,
+  "ref_send_status": null,
+  "api_chain_status": {
+   "send": 200,
+   "verify": "200:OTP verified successfully",
+   "newpw": "200:Password reset successfully"
+  },
+  "api_login_with_NEW_password": "eyJhbGciOiJIUzM4NCJ9.eyJzdWIiOiJhdTAxMi52ZXJpZnkuMTc4NzUzMjQ5NTY0OEBnbWFpbC5jb20iLCJpYXQiOjE3ODc1MzU0NjEsImV4cCI6MTc5NTMxMTQ2MX0.ibgH0vu0YdlIFiOpLqz_xbDBiOvR94wY26LRdJpeyargD-LRgXYxgABqU-op3PNp",
+  "api_OLD_password_rejected": true,
+  "acct2_new_pw_login": "eyJhbGciOiJIUzM4NCJ9.eyJzdWIiOiJhdTAxMi50YWJsZXQuMTc4NzUzMjYyMTM2MUBnbWFpbC5jb20iLCJpYXQiOjE3ODc1MzU0NjcsImV4cCI6MTc5NTMxMTQ2N30._t5_tbkiBAOPxSj8ZjLUiGpfahonbK3x9xy5eGdxtYPG3wVp536j-oXU8y74Iu_F",
+  "acct2_old_pw_rejected": true,
+  "deeplink_path_status": 404,
+  "images_requested": 0,
+  "images_200": 0,
+  "images_broken": [],
+  "network_log_mobile": [
+   "200 POST /api/v1/userManagement/reset-passwordEmail?email=au012.verify.1787532495648%40gmail.com :: Password reset email sent successfully"
+  ]
+ },
+ "failures": [
+  "STAGE 1->2 BROKEN: POST reset-passwordEmail returned 200 POST /api/v1/userManagement/reset-passwordEmail?email=au012.verify.1787532495648%40gmail.com :: Password reset email sent successfully but UI stayed on email stage (new-password stage unreachable)",
+  "TABLET: stage 1->2 broken identically; net=[\"200 POST /api/v1/userManagement/reset-passwordEmail?email=au012.tablet.1787532621361%40gmail.com :: Password reset email sent successfully\"]"
+ ],
+ "evidence": [],
+ "nav": 2,
+ "state": 1,
+ "data": 2,
+ "buttons": {
+  "total": 2,
+  "ok": 2,
+  "failed": []
+ },
+ "imgs": {},
+ "parity": {
+  "blocker": 0,
+  "major": 0,
+  "minor": 1,
+  "accepted": 0
+ },
+ "vision": {},
+ "parityMinor": "direct path /reset-password 404s on static host (hash /#/reset-password required); web reference serves the path directly"
+}

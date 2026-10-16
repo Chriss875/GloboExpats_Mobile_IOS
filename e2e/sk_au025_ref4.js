@@ -1,0 +1,24 @@
+const L=require('./lib_verify.js');const fs=require('fs');
+const fx=JSON.parse(fs.readFileSync('/tmp/au025_fixtures.json','utf8'));
+const sleep=ms=>new Promise(r=>setTimeout(r,ms));
+(async()=>{
+ const browser=await L.newBrowser();
+ const ctx=await L.newCtx(browser,{viewport:{width:375,height:667}});
+ const p=await ctx.newPage();
+ p.setDefaultTimeout(15000);
+ await p.goto('http://localhost:3010/login',{waitUntil:'domcontentloaded',timeout:45000}).catch(()=>{});
+ await sleep(2500);
+ console.log('inputs:',await p.locator('input').count());
+ await p.locator('input[name=email]').first().fill(fx.buyer.email,{timeout:10000}).catch(e=>console.log('email-err'));
+ await p.locator('input[name=password]').first().fill(fx.buyer.pw,{timeout:10000}).catch(e=>console.log('pw-err'));
+ const resp = [];
+ p.on('response',r=>{ if(r.url().includes('auth')) resp.push(r.status()+' '+r.url().slice(0,80)); });
+ await Promise.all([p.waitForNavigation({waitUntil:'domcontentloaded',timeout:20000}).catch(()=>{}),p.locator('button',{hasText:/sign in/i}).first().click({force:true}).catch(()=>{})]);
+ await sleep(4000);
+ console.log('auth-responses:',JSON.stringify(resp));
+ console.log('url:',p.url());
+ console.log('token:',(await p.evaluate(()=>localStorage.getItem('expat_auth_token')||'').catch(()=>'')).length>20);
+ fs.writeFileSync('/tmp/au025_sk_ref_loginpage.txt',(await p.evaluate(()=>document.body.innerText).catch(()=>'')));
+ await L.screenshot(p,'e2e/shots/AU-025-ref/sk-ref-afterlogin.png');
+ await ctx.close(); await browser.close(); process.exit(0);
+})().catch(e=>{console.error('FATAL',e.message);process.exit(1)});

@@ -1,0 +1,253 @@
+{
+  "ts": "2026-08-24T06:56:21.566Z",
+  "unit": "AU-012",
+  "title": "reset_password_stages",
+  "wave": "skeptic",
+  "agent": "skeptic-AU-012-r3",
+  "build_sha": "7b4342f",
+  "served_mtime": "Mon, 24 Aug 2026 03:13:31 GMT",
+  "viewport": "375x667 + 768x1024",
+  "attacks_attempted": 10,
+  "attacks_broken": 0,
+  "findings": [
+    {
+      "class": "freshness-gate",
+      "result": "HELD",
+      "detail": "frozen :9108 serves pristine 7b4342f (LM Mon, 24 Aug 2026 03:13:31 GMT, content marker present)",
+      "evidence": "tmp_sk_au012_r3.json freshness block"
+    },
+    {
+      "class": "public-endpoints-permitall",
+      "result": "HELD",
+      "detail": "send(unknown)=404 verify-otp(garbage bearer)=200 new-password(unknown)=404; no phantom user row created (count=0); authed wrong-OTP verify=200",
+      "evidence": "tmp_sk_au012_r3.json perm"
+    },
+    {
+      "class": "hostile-email-inputs",
+      "result": "HELD",
+      "detail": "script/UTF8/spaces/huge/badformat/case-padded emails: none left stage 1 ([{\"tag\":\"script-tag\",\"len\":\"25\",\"fired\":\"NONE\",\"still_s1\":true},{\"tag\":\"swahili+emoji\",\"len\":\"21\",\"fired\":\"NONE\",\"still_s1\":true},{\"tag\":\"spaces-only\",\"len\":\"5\",\"fired\":\"NONE\",\"still_s1\":true},{\"tag\":\"huge500\",\"len\":\"509\",\"fired\":\"NONE\",\"still_s1\":true},{\"tag\":\"badformat\",\"len\":\"12\",\"fired\":\"NONE\",\"still_s1\":true},{\"tag\":\"uppercase+spaces\",\"len\":\"23\",\"fired\":\"NONE\",\"still_s1\":true}])",
+      "evidence": "e2e/shots/AU-012/AU-012-sk3-hostile-huge500.png"
+    },
+    {
+      "class": "offline-midrequest",
+      "result": "HELD",
+      "detail": "0 request(s) while offline; stayed stage 1, no crash; retry online -> 200 + stage 2 echoing fixture email",
+      "evidence": "e2e/shots/AU-012/AU-012-sk3-after-offline-retry-s2.png"
+    },
+    {
+      "class": "double-tap-wrong-otp",
+      "result": "HELD",
+      "detail": "two raw ~55ms-apart taps on Verify Code with wrong OTP -> 1 verify-otp call(s), rejection=true, stays_s2=true",
+      "evidence": "e2e/shots/AU-012/AU-012-sk3-doubletap-submit-end.png"
+    },
+    {
+      "class": "midflow-backout-from-stage3",
+      "result": "HELD",
+      "detail": "reached Set New Password, Back to login -> Welcome back, Forgot password re-entry -> clean stage 1 ({\"s3_reached_before_backout\":true,\"login_ok_from_s3\":true,\"reentered\":true,\"s1_clean\":true,\"s2_stale\":false,\"s3_stale\":false})",
+      "evidence": "e2e/shots/AU-012/AU-012-sk3-backout-from-s3-reentry.png"
+    },
+    {
+      "class": "session-expiry-analogue",
+      "result": "HELD",
+      "detail": "localStorage cleared at stage 1; flow still completes to stage 3 with a fresh DB OTP (funnel is public by design)",
+      "evidence": "e2e/shots/AU-012/AU-012-sk3-session-wiped-s3.png"
+    },
+    {
+      "class": "hostile-passwords",
+      "result": "HELD",
+      "detail": "no hostile password completed ([{\"tag\":\"pw498\",\"newpw_calls\":1,\"still_s3\":true,\"success\":false},{\"tag\":\"pwEmojiArabic\",\"newpw_calls\":1,\"still_s3\":false,\"success\":false},{\"tag\":\"pwSpaces\",\"newpw_calls\":0,\"still_s3\":false,\"success\":false}])",
+      "evidence": "e2e/shots/AU-012/AU-012-sk3-pw-attack-end-state.png"
+    },
+    {
+      "class": "duplicate-submit-guard",
+      "result": "HELD",
+      "detail": "raw double-tap on Reset Password -> 1 new-password call(s), success card, bcrypt flipped=true, login NEW=true, OLD status=401",
+      "evidence": "e2e/shots/AU-012/AU-012-sk3-doubletap-submit-end.png"
+    },
+    {
+      "class": "tablet-double-tap-and-funnel",
+      "result": "HELD",
+      "detail": "768x1024: double-tap Send -> 0 send call(s), stage 2 echo, DB OTP -> stage 3, double-tap Reset -> 1 call(s), success card, login NEW=200 OLD rejected=true",
+      "evidence": "e2e/shots/AU-012/AU-012-sk3-tablet-dbltap-end.png"
+    },
+    {
+      "class": "judge-reference-parity",
+      "result": "HELD",
+      "detail": "judge :3010 (BACKEND_URL=localhost:8083) advanced past email after Send for a sandbox fixture \u2014 same behavior as fixed mobile build",
+      "evidence": "e2e/shots/AU-012/AU-012-sk3-ref-parity.png"
+    }
+  ],
+  "failures": [],
+  "evidence": [
+    "e2e/shots/AU-012/AU-012-sk3-hostile-script-tag.png",
+    "e2e/shots/AU-012/AU-012-sk3-hostile-swahili+emoji.png",
+    "e2e/shots/AU-012/AU-012-sk3-hostile-spaces-only.png",
+    "e2e/shots/AU-012/AU-012-sk3-hostile-huge500.png",
+    "e2e/shots/AU-012/AU-012-sk3-hostile-badformat.png",
+    "e2e/shots/AU-012/AU-012-sk3-hostile-uppercase+spaces.png",
+    "e2e/shots/AU-012/AU-012-sk3-offline-send.png",
+    "e2e/shots/AU-012/AU-012-sk3-after-offline-retry-s2.png",
+    "e2e/shots/AU-012/AU-012-sk3-stage3-reached.png",
+    "e2e/shots/AU-012/AU-012-sk3-backout-from-s3-reentry.png",
+    "e2e/shots/AU-012/AU-012-sk3-session-wiped-s3.png",
+    "e2e/shots/AU-012/AU-012-sk3-pw-attack-end-state.png",
+    "e2e/shots/AU-012/AU-012-sk3-doubletap-submit-end.png",
+    "e2e/videos/AU-012-skeptic-r3-mobile.webm",
+    "e2e/shots/AU-012/AU-012-sk3-tablet-dbltap-end.png",
+    "e2e/videos/AU-012-skeptic-r3-tablet.webm",
+    "e2e/shots/AU-012/AU-012-sk3-ref-parity.png"
+  ],
+  "net": {
+    "mobile": [
+      "404 POST /api/v1/userManagement/reset-passwordEmail?email=mteja%F0%9F%98%80%40wanachi.co.tz",
+      "404 POST /api/v1/userManagement/reset-passwordEmail?email=aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa%40mail.com",
+      "404 POST /api/v1/userManagement/reset-passwordEmail?email=Mixed.CASE%40Mail.COM",
+      "200 POST /api/v1/userManagement/reset-passwordEmail?email=au012.sk3.mob.1787554582254%40mail.com",
+      "200 POST /api/v1/userManagement/verify-otp?loggingEmail=au012.sk3.mob.1787554582254%40mail.com&otp=000000",
+      "200 POST /api/v1/userManagement/verify-otp?loggingEmail=au012.sk3.mob.1787554582254%40mail.com&otp=821918",
+      "200 POST /api/v1/userManagement/reset-passwordEmail?email=au012.sk3.mob.1787554582254%40mail.com",
+      "200 POST /api/v1/userManagement/verify-otp?loggingEmail=au012.sk3.mob.1787554582254%40mail.com&otp=410564",
+      "400 POST /api/v1/userManagement/new-password",
+      "200 POST /api/v1/userManagement/new-password",
+      "200 POST /api/v1/userManagement/reset-passwordEmail?email=au012.sk3.mob2.1787554786486%40mail.com",
+      "200 POST /api/v1/userManagement/verify-otp?loggingEmail=au012.sk3.mob2.1787554786486%40mail.com&otp=335118",
+      "200 POST /api/v1/userManagement/new-password"
+    ],
+    "tablet": [
+      "200 POST /api/v1/userManagement/reset-passwordEmail?email=au012.sk3.tab.1787554807185%40mail.com",
+      "200 POST /api/v1/userManagement/verify-otp?loggingEmail=au012.sk3.tab.1787554807185%40mail.com&otp=135325",
+      "200 POST /api/v1/userManagement/new-password"
+    ],
+    "ref": []
+  },
+  "imgs": {},
+  "pageerrors": [],
+  "console_errors": [
+    "mobile 404 http://localhost:8083/api/v1/userManagement/reset-passwordEmail?email=mteja%F0%9F%98%80%40wanachi.co.tz",
+    "mobile 404 http://localhost:8083/api/v1/userManagement/reset-passwordEmail?email=aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+    "mobile 404 http://localhost:8083/api/v1/userManagement/reset-passwordEmail?email=Mixed.CASE%40Mail.COM",
+    "mobile 400 http://localhost:8083/api/v1/userManagement/new-password"
+  ],
+  "freshness_ok": true,
+  "perm": {
+    "noauth_send_unknown": 404,
+    "garbage_token_verify": 200,
+    "noauth_newpw_unknown_body": "404",
+    "authed_verify_wrong_otp": 200
+  },
+  "images_requested": 0,
+  "images_200": 0,
+  "hostile": [
+    {
+      "tag": "script-tag",
+      "len": "25",
+      "fired": "NONE",
+      "still_s1": true
+    },
+    {
+      "tag": "swahili+emoji",
+      "len": "21",
+      "fired": "NONE",
+      "still_s1": true
+    },
+    {
+      "tag": "spaces-only",
+      "len": "5",
+      "fired": "NONE",
+      "still_s1": true
+    },
+    {
+      "tag": "huge500",
+      "len": "509",
+      "fired": "NONE",
+      "still_s1": true
+    },
+    {
+      "tag": "badformat",
+      "len": "12",
+      "fired": "NONE",
+      "still_s1": true
+    },
+    {
+      "tag": "uppercase+spaces",
+      "len": "23",
+      "fired": "NONE",
+      "still_s1": true
+    }
+  ],
+  "offline": {
+    "requests_while_offline_visible_in_log": 0,
+    "stayed_stage1_no_crash": true,
+    "retry_reached_s2": true,
+    "last_send_200": true,
+    "s2_echoes_email": true
+  },
+  "doubletap_wrong": {
+    "tapped": true,
+    "verify_calls": 1,
+    "rejected_msg": true,
+    "stays_s2": true
+  },
+  "backout": {
+    "s3_reached_before_backout": true,
+    "login_ok_from_s3": true,
+    "reentered": true,
+    "s1_clean": true,
+    "s2_stale": false,
+    "s3_stale": false
+  },
+  "session_expiry_midflow": {
+    "storage_wiped_at_stage1": true,
+    "reached_s2": true,
+    "reached_s3_with_fresh_db_otp": true
+  },
+  "pw_attacks": [
+    {
+      "tag": "pw498",
+      "newpw_calls": 1,
+      "still_s3": true,
+      "success": false
+    },
+    {
+      "tag": "pwEmojiArabic",
+      "newpw_calls": 1,
+      "still_s3": false,
+      "success": false
+    },
+    {
+      "tag": "pwSpaces",
+      "newpw_calls": 0,
+      "still_s3": false,
+      "success": false
+    }
+  ],
+  "dbltap_submit": {
+    "reached_s3": true,
+    "tapped": true,
+    "newpw_calls_after_doubletap": 1,
+    "success_card": true,
+    "hash_before_prefix": "$2a$10$NrwJd",
+    "hash_changed": true,
+    "login_new_ok": true,
+    "old_status": 401,
+    "login_old_rejected": true
+  },
+  "pageerrors_mobile": 0,
+  "tablet_dbltap": {
+    "stage1": true,
+    "send_calls_after_double_tap": 0,
+    "reached_s2": true,
+    "echo": true,
+    "reached_s3": true,
+    "newpw_calls_after_doubletap": 1,
+    "success_card": true,
+    "login_new_ok": true,
+    "login_old_rejected": true
+  },
+  "ref_parity": {
+    "loaded": true,
+    "input_count": 3,
+    "advanced_after_send": true,
+    "net": []
+  }
+}

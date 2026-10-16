@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- The websites this app belongs to (AndroidManifest asset_statements).
+         Read by Chrome for navigator.getInstalledRelatedApps() on the site. -->
+    <string name="asset_statements" translatable="false">
+        [{
+          \"relation\": [\"delegate_permission/common.handle_all_urls\"],
+          \"target\": {\"namespace\": \"web\", \"site\": \"https://www.globoexpats.com\"}
+        },{
+          \"relation\": [\"delegate_permission/common.handle_all_urls\"],
+          \"target\": {\"namespace\": \"web\", \"site\": \"https://globoexpats.com\"}
+        },{
+          \"relation\": [\"delegate_permission/common.handle_all_urls\"],
+          \"target\": {\"namespace\": \"web\", \"site\": \"https://dev.globoexpats.com\"}
+        }]
+    </string>
+</resources>

@@ -1,0 +1,200 @@
+{
+  "productId": 1174,
+  "clickCount": 217.0,
+  "sellerId": 76,
+  "sellerUserId": 76,
+  "sellerName": "Test Seller",
+  "sellerOrganization": "Test Shop",
+  "productRating": 5.0,
+  "totalRatingsCount": 1,
+  "productName": "Natural Cocoa Powder",
+  "productDescription": "100% Natural Cocoa Powder\nPure, unsweetened cocoa powder made from carefully selected beans. No chemicals, no additivesâjust authentic cocoa.\n\nUnsweetened & Natural: Perfect for health-conscious lifestyles.\n\nVersatile Use: Best for hot chocolate, baking, smoothies, and desserts.\n\nRich Flavor: Deep, aromatic taste that elevates every recipe.\n\nEnjoy wholesome cocoa goodness, naturally crafted for your everyday indulgence",
+  "productCondition": null,
+  "productCountry": "Tanzania",
+  "productRegion": "dar es salaam",
+  "productStreet": "665f+h4r",
+  "placeName": "Test Shop, Dar es Salaam",
+  "productCurrency": "TZS",
+  "productAskingPrice": 20000.0,
+  "storedProductAskingPrice": 20000.0,
+  "productOriginalPrice": 0.0,
+  "productWarranty": null,
+  "categoryId": 15,
+  "categoryName": "Food & Groceries",
+  "subcategoryId": 140,
+  "subcategoryName": "Organic & Specialty Foods",
+  "formattedCreatedAt": null,
+  "productImages": [
+    {
+      "imageId": 3526,
+      "imageUrl": "uploads/240d2ae0-43c6-4c6a-beb3-b7d07ea67b5a_image1.webp"
+    },
+    {
+      "imageId": 3527,
+      "imageUrl": "uploads/ed339405-cd42-45f1-a3dd-55d8658c82b0_image2.webp"
+    },
+    {
+      "imageId": 3528,
+      "imageUrl": "uploads/aab8c994-747e-4c3b-ab16-820a511b225e_image6.webp"
+    }
+  ],
+  "productAttributes": [],
+  "choiceConfiguration": {
+    "hasChoices": true,
+    "attributes": [
+      {
+        "definitionId": 58,
+        "name": "Dietary Preference",
+        "inputType": "BUTTONS",
+        "required": false,
+        "visual": false,
+        "allowDifferentPrices": false,
+        "defaultValueId": null,
+        "values": [
+          {
+            "id": "organic-4dad8f5e",
+            "label": "Organic",
+            "colorHex": null,
+            "unit": null,
+            "imageUrl": null,
+            "imageIndex": null,
+            "priceOverridden": false,
+            "sellerPayoutAdjustment": 0.0,
+            "active": true
+          },
+          {
+            "id": "sugar-free-3f64e992",
+            "label": "Sugar-Free",
+            "colorHex": null,
+            "unit": null,
+            "imageUrl": null,
+            "imageIndex": null,
+            "priceOverridden": false,
+            "sellerPayoutAdjustment": 0.0,
+            "active": true
+          },
+          {
+            "id": "halal-13e9d370",
+            "label": "Halal",
+            "colorHex": null,
+            "unit": null,
+            "imageUrl": null,
+            "imageIndex": null,
+            "priceOverridden": false,
+            "sellerPayoutAdjustment": 0.0,
+            "active": true
+          }
+        ]
+      },
+      {
+        "definitionId": 14,
+        "name": "Package Type",
+        "inputType": "BUTTONS",
+        "required": true,
+        "visual": false,
+        "allowDifferentPrices": false,
+        "defaultValueId": null,
+        "values": [
+          {
+            "id": "pouch-fec6f562",
+            "label": "Pouch",
+            "colorHex": null,
+            "unit": null,
+            "imageUrl": null,
+            "imageIndex": null,
+            "priceOverridden": false,
+            "sellerPayoutAdjustment": 0.0,
+            "active": true
+          }
+        ]
+      },
+      {
+        "definitionId": 15,
+        "name": "Pack Size",
+        "inputType": "BUTTONS",
+        "required": false,
+        "visual": false,
+        "allowDifferentPrices": false,
+        "defaultValueId": null,
+        "values": [
+          {
+            "id": "single-598cb326",
+            "label": "Single",
+            "colorHex": null,
+            "unit": null,
+            "imageUrl": null,
+            "imageIndex": null,
+            "priceOverridden": false,
+            "sellerPayoutAdjustment": 0.0,
+            "active": true
+          }
+        ]
+      },
+      {
+        "definitionId": 59,
+        "name": "Storage Type",
+        "inputType": "BUTTONS",
+        "required": false,
+        "visual": false,
+        "allowDifferentPrices": false,
+        "defaultValueId": null,
+        "values": [
+          {
+            "id": "room-temperature-591def93",
+            "label": "Room Temperature",
+            "colorHex": null,
+            "unit": null,
+            "imageUrl": null,
+            "imageIndex": null,
+            "priceOverridden": false,
+            "sellerPayoutAdjustment": 0.0,
+            "active": true
+          }
+        ]
+      }
+    ]
+  },
+  "rentalConfiguration": null,
+  "rentalUnavailableUntil": null,
+  "rentalBookedToday": false,
+  "reviews": [],
+  "profileImageUrl": null,
+  "productQuantity": 50.0,
+  "productionTimeDays": null,
+  "soldQuantity": 0.0,
+  "whatsappNumber": "+255 700 000 000",
+  "sameRegionDeliveryFeeMin": 3000.0,
+  "sameRegionDeliveryFeeMax": 17000.0,
+  "outsideRegionDeliveryFeeMin": 17000.0,
+  "outsideRegionDeliveryFeeMax": 62000.0,
+  "latitude": -6.8,
+  "longitude": 39.28,
+  "deliveryTransportMode": "BODA",
+  "transportRequirement": "REQUIRED",
+  "neighbourhood": null,
+  "coordinatesSource": "PINNED",
+  "transportModeSource": "SELLER_SELECTED",
+  "deliverySetupGrandfathered": false,
+  "categoryCommissionPercentage": 10.0,
+  "sellerPayout": 17000.0,
+  "finalTotalSellingPrice": 20000.0,
+  "sellerFacingCommissionAmount": 3000.0,
+  "grossPlatformCommission": 2575.0,
+  "vat": 0.0,
+  "selcomCommissionFee": 220.00000000000003,
+  "selcomTransactionFee": 425.0,
+  "platformNetProfitBeforeCuts": 2575.0,
+  "platformNetProfit": 2355.0,
+  "platformNetProfitAfterCuts": 2355.0,
+  "roundingAdjustment": 655.0,
+  "vatRate": 0.0,
+  "selcomCommissionRate": 0.011000000000000001,
+  "selcomTransactionRate": 0.025,
+  "pricingRulesVersion": 1,
+  "pricingSnapshotSource": "LISTING_SNAPSHOT",
+  "productStatus": "PENDING",
+  "availabilityStatus": null,
+  "deliverySetupReady": true,
+  "deliverySetupIssues": [],
+  "verified": false
+}
