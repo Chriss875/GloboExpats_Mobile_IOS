@@ -114,6 +114,20 @@ if (( ${#ios_oauth_missing[@]} )); then
   exit 1
 fi
 
+# Google only permits server ID tokens when the iOS client and server client
+# belong to the same Google Cloud project. Firebase remains free to use a
+# separate project for FCM; in that case GOOGLE_IOS_CLIENT_ID must be supplied
+# explicitly in .env.release from the backend OAuth project.
+ios_oauth_project="${GOOGLE_IOS_CLIENT_ID%%-*}"
+server_oauth_project="${GOOGLE_SERVER_CLIENT_ID%%-*}"
+if [[ -z "$ios_oauth_project" || -z "$server_oauth_project" ||
+      "$ios_oauth_project" != "$server_oauth_project" ]]; then
+  echo "error: iOS and server Google OAuth clients belong to different projects." >&2
+  echo "       Create an iOS OAuth client in the server OAuth project and set" >&2
+  echo "       GOOGLE_IOS_CLIENT_ID and GOOGLE_IOS_REVERSED_CLIENT_ID in $ENV_FILE." >&2
+  exit 1
+fi
+
 if ! cmp -s "$FIREBASE_IOS_PLIST_PATH" ios/Runner/GoogleService-Info.plist; then
   cp "$FIREBASE_IOS_PLIST_PATH" ios/Runner/GoogleService-Info.plist
 fi
@@ -142,6 +156,8 @@ if [[ "$SIGNING_MODE" == "--no-codesign" ]]; then
   "$FLUTTER_BIN" build ios --release --no-codesign "${DEFINES[@]}"
   echo "==> Verified build/ios/iphoneos/Runner.app (unsigned)"
 else
-  "$FLUTTER_BIN" build ipa --release "${DEFINES[@]}"
+  "$FLUTTER_BIN" build ipa --release \
+    --export-options-plist=ios/ExportOptions.plist \
+    "${DEFINES[@]}"
   echo "==> Upload build/ios/ipa/*.ipa with Xcode Organizer or Transporter"
 fi

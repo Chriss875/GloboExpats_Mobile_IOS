@@ -43,6 +43,15 @@ post_install do |installer|
     # native dependency with the Runner's supported minimum.
     target.build_configurations.each do |config|
       config.build_settings['IPHONEOS_DEPLOYMENT_TARGET'] = '15.0'
+
+      # GloboExpats only obtains the user's location while the map picker is
+      # open. Avoid compiling Geolocator's unused "always" permission path:
+      # it makes App Store Connect require a background-location explanation.
+      if target.name == 'geolocator_apple'
+        definitions = config.build_settings['GCC_PREPROCESSOR_DEFINITIONS'] || ['$(inherited)']
+        definitions << 'BYPASS_PERMISSION_LOCATION_ALWAYS=1' unless definitions.include?('BYPASS_PERMISSION_LOCATION_ALWAYS=1')
+        config.build_settings['GCC_PREPROCESSOR_DEFINITIONS'] = definitions
+      end
     end
   end
 end

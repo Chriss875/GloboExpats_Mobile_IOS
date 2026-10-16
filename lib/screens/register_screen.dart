@@ -268,24 +268,33 @@ class _RegisterScreenState extends State<RegisterScreen> {
                   style: TextStyle(color: AppPalette.of(context).textSecondary),
                 ),
               ],
-              if (_step == 1 && appleSignInSupported) ...[
-                const SizedBox(height: 22),
-                SignInWithAppleButton(
-                  onPressed: busy ? null : _appleSignUp,
-                  height: 48,
-                  borderRadius: const BorderRadius.all(Radius.circular(24)),
-                ),
-              ],
-              // Google sits ABOVE the email route, and only on the first step
+              // Match the web route: Google, Apple, then email. These only
+              // appear on the first step — once a code has been sent the
+              // account is already an email one.
+              // Google sits above the email route and only on the first step
               // — once a code has been sent the account is already an email
               // one (web shows both buttons under `step === 1` only).
               if (_step == 1 && AppConfig.googleSignInConfigured) ...[
-                SizedBox(height: appleSignInSupported ? 12 : 22),
+                const SizedBox(height: 22),
                 AuthPillButton(
                   icon: const GoogleGLogo(size: 20),
                   label: 'Sign up with Google',
                   onPressed: busy ? null : _googleSignUp,
                 ),
+              ],
+              if (_step == 1 && appleSignInSupported) ...[
+                SizedBox(height: AppConfig.googleSignInConfigured ? 12 : 22),
+                SignInWithAppleButton(
+                  onPressed: busy ? null : _appleSignUp,
+                  text: 'Sign up with Apple',
+                  height: 54,
+                  style: SignInWithAppleButtonStyle.whiteOutlined,
+                  borderRadius: const BorderRadius.all(Radius.circular(27)),
+                ),
+              ],
+              if (_step == 1 &&
+                  (AppConfig.googleSignInConfigured ||
+                      appleSignInSupported)) ...[
                 const SizedBox(height: 18),
                 const Divider(height: 1),
               ],

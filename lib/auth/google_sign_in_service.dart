@@ -26,12 +26,17 @@ import '../config.dart';
 /// Google Cloud project as the configured server client id.
 String googleFailureMessage(Object e) {
   final text = e.toString();
+  if (text.contains('invalid_audience')) {
+    return 'Google sign-in is being configured for this iPhone. Please try '
+        'again after the GloboExpats team has completed the update.';
+  }
   if (text.contains('ApiException: 10') || text.contains('DEVELOPER_ERROR')) {
     return 'Google rejected this build (DEVELOPER_ERROR). The app\'s package '
         'name and signing certificate are not registered as an Android OAuth '
         'client in the same Google project as the server client id.';
   }
-  if (text.contains('ApiException: 12501') || text.contains('SIGN_IN_CANCELLED')) {
+  if (text.contains('ApiException: 12501') ||
+      text.contains('SIGN_IN_CANCELLED')) {
     return 'Google sign-in was cancelled.';
   }
   if (text.contains('ApiException: 7') || text.contains('NETWORK_ERROR')) {
