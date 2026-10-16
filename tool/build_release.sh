@@ -61,6 +61,12 @@ else
   API_BASE_URL="https://apidev.globoexpats.com"
 fi
 
+if [[ "$FLAVOR" == "prod" ]]; then
+  ANALYTICS_BASE_URL="${ANALYTICS_BASE_URL_PROD:-${ANALYTICS_BASE_URL:-}}"
+else
+  ANALYTICS_BASE_URL="${ANALYTICS_BASE_URL_DEV:-${ANALYTICS_BASE_URL:-}}"
+fi
+
 # Google ID tokens are audience-bound. Dev and production use different Web
 # OAuth clients, so selecting only the backend URL is not enough: a prod app
 # built with the dev audience reaches the live endpoint but is rejected as an
