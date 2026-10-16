@@ -40,6 +40,7 @@ set +a
 
 if [[ "$FLAVOR" == "prod" ]]; then
   API_BASE_URL="https://api.globoexpats.com"
+  ANALYTICS_BASE_URL="${ANALYTICS_BASE_URL_PROD:-${ANALYTICS_BASE_URL:-}}"
   GOOGLE_SERVER_CLIENT_ID="${GOOGLE_SERVER_CLIENT_ID_PROD:-${GOOGLE_SERVER_CLIENT_ID:-}}"
   if [[ -z "${MATOMO_URL_PROD:-}" && -n "${MATOMO_URL:-}" ]]; then
     echo "warning: MATOMO_URL_PROD is unset — falling back to the legacy MATOMO_URL." >&2
@@ -55,6 +56,7 @@ if [[ "$FLAVOR" == "prod" ]]; then
   PROPERTY_RENTALS="${PROPERTY_RENTALS_PROD:-true}"
 else
   API_BASE_URL="https://apidev.globoexpats.com"
+  ANALYTICS_BASE_URL="${ANALYTICS_BASE_URL_DEV:-${ANALYTICS_BASE_URL:-}}"
   GOOGLE_SERVER_CLIENT_ID="${GOOGLE_SERVER_CLIENT_ID_DEV:-${GOOGLE_SERVER_CLIENT_ID:-}}"
   MATOMO_URL="${MATOMO_URL_DEV:-${MATOMO_URL:-}}"
   MATOMO_SITE_ID="${MATOMO_SITE_ID_DEV:-${MATOMO_SITE_ID:-}}"
@@ -76,6 +78,7 @@ required=(
   ANALYTICS_BASE_URL
   GOOGLE_SERVER_CLIENT_ID
   GOOGLE_MAPS_API_KEY
+  GOOGLE_PLACES_API_KEY
   FIREBASE_IOS_PLIST_PATH
 )
 missing=()
@@ -111,7 +114,9 @@ if (( ${#ios_oauth_missing[@]} )); then
   exit 1
 fi
 
-cp "$FIREBASE_IOS_PLIST_PATH" ios/Runner/GoogleService-Info.plist
+if ! cmp -s "$FIREBASE_IOS_PLIST_PATH" ios/Runner/GoogleService-Info.plist; then
+  cp "$FIREBASE_IOS_PLIST_PATH" ios/Runner/GoogleService-Info.plist
+fi
 cat > ios/Flutter/Secrets.xcconfig <<CONFIG
 GOOGLE_MAPS_API_KEY=$GOOGLE_MAPS_API_KEY
 GOOGLE_IOS_CLIENT_ID=$GOOGLE_IOS_CLIENT_ID

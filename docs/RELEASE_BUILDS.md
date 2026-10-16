@@ -41,7 +41,7 @@ duplicate after you have waited through the upload, so the script checks
 
 Everything the app needs at build time lives in `.env.release` (gitignored) —
 see `.env.release.example` for the full key list and copy it as a starting
-point. Required: `ANALYTICS_BASE_URL`, `GOOGLE_SERVER_CLIENT_ID_DEV`,
+point. Required: `ANALYTICS_BASE_URL_DEV`, `ANALYTICS_BASE_URL_PROD`, `GOOGLE_SERVER_CLIENT_ID_DEV`,
 `GOOGLE_SERVER_CLIENT_ID_PROD`, `GOOGLE_MAPS_API_KEY`, plus the per-flavour
 `MATOMO_URL_*` / `MATOMO_SITE_ID_*` / `MATOMO_TOKEN_*`. `GOOGLE_PLACES_API_KEY`
 is optional. The script selects the matching Google Web OAuth client for the
@@ -71,7 +71,7 @@ Two deliberate details:
 - `GOOGLE_MAPS_API_KEY` is read twice by design: as a dart-define, and from
   the environment by `build.gradle` for the native manifest placeholder.
 
-`ANALYTICS_BASE_URL` must be `https://` — Android blocks cleartext from API 28,
+The selected `ANALYTICS_BASE_URL_*` must be `https://` — Android blocks cleartext from API 28,
 so an `http://` endpoint is a silently dead one, and the script rejects it.
 
 ## Device support
