@@ -126,25 +126,28 @@ class _LoginScreenState extends State<LoginScreen> {
                                 fontSize: 12)))
                   ])),
             ],
-            if (appleSignInSupported) ...[
-              const SizedBox(height: 22),
-              SignInWithAppleButton(
-                onPressed: widget.store.busy ? null : _appleSignIn,
-                height: 48,
-                borderRadius: const BorderRadius.all(Radius.circular(24)),
-              ),
-            ],
-            // Web order: Google sits ABOVE the email form, as an
-            // outlined pill with the real brand mark. Shown only
-            // when a Google client id is configured, since the
+            // Match the web login: Google, Apple, then the email route.
+            // Google is shown only when a client id is configured, since the
             // button cannot do anything without one.
             if (AppConfig.googleSignInConfigured) ...[
-              SizedBox(height: appleSignInSupported ? 12 : 22),
+              const SizedBox(height: 22),
               AuthPillButton(
                 icon: const GoogleGLogo(size: 20),
                 label: 'Login with Google',
                 onPressed: widget.store.busy ? null : _googleSignIn,
               ),
+            ],
+            if (appleSignInSupported) ...[
+              SizedBox(height: AppConfig.googleSignInConfigured ? 12 : 22),
+              SignInWithAppleButton(
+                onPressed: widget.store.busy ? null : _appleSignIn,
+                text: 'Login with Apple',
+                height: 54,
+                style: SignInWithAppleButtonStyle.whiteOutlined,
+                borderRadius: const BorderRadius.all(Radius.circular(27)),
+              ),
+            ],
+            if (AppConfig.googleSignInConfigured || appleSignInSupported) ...[
               const SizedBox(height: 18),
               const Divider(height: 1),
             ],

@@ -14,18 +14,21 @@ import 'package:http/testing.dart';
 /// and secret and builds the consent URL itself, so there is nothing to embed
 /// or leak here.
 void main() {
-  http.Response json(Object body, [int status = 200]) => http.Response(
-      jsonEncode(body), status, headers: {'content-type': 'application/json'});
+  http.Response json(Object body, [int status = 200]) =>
+      http.Response(jsonEncode(body), status,
+          headers: {'content-type': 'application/json'});
 
   ApiClient clientFor(Future<http.Response> Function(http.Request) handler) =>
       ApiClient(client: MockClient(handler));
 
   group('starting the flow', () {
-    test('asks the backend for the consent URL and passes nextPath along', () async {
+    test('asks the backend for the consent URL and passes nextPath along',
+        () async {
       Uri? seen;
       final api = clientFor((req) async {
         seen = req.url;
-        return json({'authUrl': 'https://accounts.google.com/o/oauth2/v2/auth?x=1'});
+        return json(
+            {'authUrl': 'https://accounts.google.com/o/oauth2/v2/auth?x=1'});
       });
 
       final url = await api.getGoogleAuthUrl(nextPath: '/orders');
@@ -67,8 +70,10 @@ void main() {
     });
 
     test('a blocked account surfaces the backend reason', () async {
-      final api = clientFor((_) async => json(
-          {'errorCode': 'ACCOUNT_BLOCKED', 'message': 'This account is blocked.'}, 403));
+      final api = clientFor((_) async => json({
+            'errorCode': 'ACCOUNT_BLOCKED',
+            'message': 'This account is blocked.'
+          }, 403));
       await expectLater(
         api.exchangeOAuthCode('abc'),
         throwsA(isA<ApiException>()
@@ -76,7 +81,8 @@ void main() {
       );
     });
 
-    test('a session without a token is refused rather than half-applied', () async {
+    test('a session without a token is refused rather than half-applied',
+        () async {
       final api = clientFor((_) async => json({'email': 'a@b.com'}));
       expect(() => api.exchangeOAuthCode('abc'), throwsA(isA<ApiException>()));
     });
@@ -95,8 +101,10 @@ void main() {
       expect(auth.email, 'a@b.com');
     });
 
-    test('a failure leaves the user signed out with a readable reason', () async {
-      final api = clientFor((_) async => json({'error': 'Google said no'}, 400));
+    test('a failure leaves the user signed out with a readable reason',
+        () async {
+      final api =
+          clientFor((_) async => json({'error': 'Google said no'}, 400));
       final auth = AuthStore(api: api);
 
       expect(await auth.completeGoogleSignIn('abc'), isFalse);
@@ -121,7 +129,8 @@ void main() {
 
     test('a token the backend will not verify surfaces its reason', () async {
       final api = clientFor((_) async => json(
-          {'error': 'That Google sign-in was not issued for GloboExpats.'}, 401));
+          {'error': 'That Google sign-in was not issued for GloboExpats.'},
+          401));
       await expectLater(
         api.signInWithGoogleIdToken('someone-elses-token'),
         throwsA(isA<ApiException>()
@@ -130,9 +139,10 @@ void main() {
     });
 
     test('a blocked account is reported, not silently failed', () async {
-      final api = clientFor((_) async => json(
-          {'errorCode': 'ACCOUNT_BLOCKED', 'message': 'Your account has been blocked.'},
-          403));
+      final api = clientFor((_) async => json({
+            'errorCode': 'ACCOUNT_BLOCKED',
+            'message': 'Your account has been blocked.'
+          }, 403));
       await expectLater(
         api.signInWithGoogleIdToken('tok'),
         throwsA(isA<ApiException>()
@@ -215,8 +225,18 @@ void main() {
       expect(message, isNot(contains('could not be completed')));
     });
 
+    test('an iOS audience mismatch does not expose raw OAuth internals', () {
+      const raw = 'PlatformException(sign_in_failed, '
+          'org.openid.appauth.oauth_token, invalid_audience: The audience '
+          'client and the client need to be in the same project., null)';
+      final message = googleFailureMessage(raw);
+      expect(message, contains('being configured'));
+      expect(message, isNot(contains('invalid_audience')));
+    });
+
     test('a cancelled picker is not dressed up as a failure', () {
-      expect(googleFailureMessage('ApiException: 12501'), contains('cancelled'));
+      expect(
+          googleFailureMessage('ApiException: 12501'), contains('cancelled'));
     });
 
     test('a network failure says so', () {
