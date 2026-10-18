@@ -42,6 +42,8 @@ if [[ "$FLAVOR" == "prod" ]]; then
   API_BASE_URL="https://api.globoexpats.com"
   ANALYTICS_BASE_URL="${ANALYTICS_BASE_URL_PROD:-${ANALYTICS_BASE_URL:-}}"
   GOOGLE_SERVER_CLIENT_ID="${GOOGLE_SERVER_CLIENT_ID_PROD:-${GOOGLE_SERVER_CLIENT_ID:-}}"
+  GOOGLE_IOS_CLIENT_ID="${GOOGLE_IOS_CLIENT_ID_PROD:-${GOOGLE_IOS_CLIENT_ID:-}}"
+  GOOGLE_IOS_REVERSED_CLIENT_ID="${GOOGLE_IOS_REVERSED_CLIENT_ID_PROD:-${GOOGLE_IOS_REVERSED_CLIENT_ID:-}}"
   if [[ -z "${MATOMO_URL_PROD:-}" && -n "${MATOMO_URL:-}" ]]; then
     echo "warning: MATOMO_URL_PROD is unset — falling back to the legacy MATOMO_URL." >&2
   fi
@@ -58,6 +60,8 @@ else
   API_BASE_URL="https://apidev.globoexpats.com"
   ANALYTICS_BASE_URL="${ANALYTICS_BASE_URL_DEV:-${ANALYTICS_BASE_URL:-}}"
   GOOGLE_SERVER_CLIENT_ID="${GOOGLE_SERVER_CLIENT_ID_DEV:-${GOOGLE_SERVER_CLIENT_ID:-}}"
+  GOOGLE_IOS_CLIENT_ID="${GOOGLE_IOS_CLIENT_ID_DEV:-${GOOGLE_IOS_CLIENT_ID:-}}"
+  GOOGLE_IOS_REVERSED_CLIENT_ID="${GOOGLE_IOS_REVERSED_CLIENT_ID_DEV:-${GOOGLE_IOS_REVERSED_CLIENT_ID:-}}"
   MATOMO_URL="${MATOMO_URL_DEV:-${MATOMO_URL:-}}"
   MATOMO_SITE_ID="${MATOMO_SITE_ID_DEV:-${MATOMO_SITE_ID:-}}"
   MATOMO_TOKEN="${MATOMO_TOKEN_DEV:-${MATOMO_TOKEN:-}}"
@@ -122,9 +126,11 @@ ios_oauth_project="${GOOGLE_IOS_CLIENT_ID%%-*}"
 server_oauth_project="${GOOGLE_SERVER_CLIENT_ID%%-*}"
 if [[ -z "$ios_oauth_project" || -z "$server_oauth_project" ||
       "$ios_oauth_project" != "$server_oauth_project" ]]; then
+  flavor_suffix="${FLAVOR^^}"
   echo "error: iOS and server Google OAuth clients belong to different projects." >&2
   echo "       Create an iOS OAuth client in the server OAuth project and set" >&2
-  echo "       GOOGLE_IOS_CLIENT_ID and GOOGLE_IOS_REVERSED_CLIENT_ID in $ENV_FILE." >&2
+  echo "       GOOGLE_IOS_CLIENT_ID_${flavor_suffix} and" >&2
+  echo "       GOOGLE_IOS_REVERSED_CLIENT_ID_${flavor_suffix} in $ENV_FILE." >&2
   exit 1
 fi
 
