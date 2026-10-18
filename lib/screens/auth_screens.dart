@@ -133,7 +133,7 @@ class _LoginScreenState extends State<LoginScreen> {
               const SizedBox(height: 22),
               AuthPillButton(
                 icon: const GoogleGLogo(size: 20),
-                label: 'Login with Google',
+                label: 'Continue with Google',
                 onPressed: widget.store.busy ? null : _googleSignIn,
               ),
             ],
@@ -141,7 +141,7 @@ class _LoginScreenState extends State<LoginScreen> {
               SizedBox(height: AppConfig.googleSignInConfigured ? 12 : 22),
               SignInWithAppleButton(
                 onPressed: widget.store.busy ? null : _appleSignIn,
-                text: 'Login with Apple',
+                text: 'Continue with Apple',
                 height: 54,
                 style: SignInWithAppleButtonStyle.whiteOutlined,
                 borderRadius: const BorderRadius.all(Radius.circular(27)),
