@@ -24,7 +24,6 @@ class LoginScreen extends StatefulWidget {
   @override
   State<LoginScreen> createState() => _LoginScreenState();
 }
-
 class _LoginScreenState extends State<LoginScreen> {
   final _formKey = GlobalKey<FormState>();
   final _email = TextEditingController();
@@ -139,12 +138,16 @@ class _LoginScreenState extends State<LoginScreen> {
             ],
             if (appleSignInSupported) ...[
               SizedBox(height: AppConfig.googleSignInConfigured ? 12 : 22),
-              SignInWithAppleButton(
+              // Keep Apple and Google on the same app-owned pill. The package
+              // button uses Apple's own typeface and dark outline, which makes
+              // this screen look like two unrelated controls.
+              AuthPillButton(
                 onPressed: widget.store.busy ? null : _appleSignIn,
-                text: 'Continue with Apple',
-                height: 54,
-                style: SignInWithAppleButtonStyle.whiteOutlined,
-                borderRadius: const BorderRadius.all(Radius.circular(27)),
+                icon: CustomPaint(
+                  size: const Size.square(20),
+                  painter: const AppleLogoPainter(color: AppColors.neutral800),
+                ),
+                label: 'Continue with Apple',
               ),
             ],
             if (AppConfig.googleSignInConfigured || appleSignInSupported) ...[
@@ -272,3 +275,4 @@ class _LoginScreenState extends State<LoginScreen> {
     );
   }
 }
+
